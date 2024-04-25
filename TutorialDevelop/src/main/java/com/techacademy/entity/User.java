@@ -16,7 +16,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Data;
-
+import jakarta.persistence.OneToOne; // 追加
+import jakarta.persistence.PreRemove; // 追加
+import org.springframework.transaction.annotation.Transactional; // 追加
 @Data
 @Entity
 @Table(name = "user")
@@ -55,4 +57,18 @@ public class User {
     @Length(max=50) // 追加
     private String email;
 
+ // ----- 追加ここから -----
+    @OneToOne(mappedBy="user")
+    private Authentication authentication;
+
+    /** レコードが削除される前に行なう処理 */
+    @PreRemove
+    @Transactional
+    private void preRemove() {
+        // 認証エンティティからuserを切り離す
+        if (authentication!=null) {
+            authentication.setUser(null);
+        }
+    }
+    // ----- 追加ここまで -----
 }
