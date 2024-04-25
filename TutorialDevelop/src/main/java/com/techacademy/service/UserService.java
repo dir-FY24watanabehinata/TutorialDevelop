@@ -1,7 +1,7 @@
 package com.techacademy.service;
 
 import java.util.List;
-
+import java.util.Set; // 追加
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,6 +32,16 @@ public class UserService {
     @Transactional
     public User saveUser(User user) {
         return userRepository.save(user);
+    }
+    // ----- 追加:ここまで -----
+    
+ // ----- 追加:ここから -----
+    /** Userの削除を行なう */
+    @Transactional
+    public void deleteUser(Set<Integer> idck) {
+        for(Integer id : idck) {
+            userRepository.deleteById(id);
+        }
     }
     // ----- 追加:ここまで -----
 
